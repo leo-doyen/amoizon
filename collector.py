@@ -3,16 +3,20 @@ from selenium.webdriver.common.by import By
 from utiles import Database
 import time
 
-def the_chain(nb_pages, articles,driver,searchTruncate):
+
+def collect(nb_pages, articles,driver,searchTruncate):
+
+    # create a database to store the data
     Database.connectDb()
     Database.createTable()
     
     data = []
+    # loop on the number of pages
     start_urls = [f'https://www.amazon.fr/s?k={searchTruncate}&page={n}' for n in range(1,nb_pages+1)]
     i = 0
+    # loop on the pages
     for n in range(0, nb_pages) :
-        
-        print(start_urls[n])
+
         lien = start_urls[n]
         time.sleep(1)
         driver.get(lien)
@@ -20,13 +24,13 @@ def the_chain(nb_pages, articles,driver,searchTruncate):
         articles = driver.find_elements(By.CLASS_NAME,
                         'sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
         nb_art = len(articles)
-        
+
+        #  loop on the articles
         for n in range(nb_art):
             
             tab = {}
             i = i+1
-    #         print(n)
-        #     a-size-base-plus a-color-base a-text-normal
+
             try:
                 name = articles[n].find_element(By.CLASS_NAME,'a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')
                 print(name.text)
@@ -38,7 +42,7 @@ def the_chain(nb_pages, articles,driver,searchTruncate):
             try:
 
                 note = articles[n].find_element(By.CLASS_NAME, 'a-row.a-size-small').find_elements(By.TAG_NAME, 'span')[0].get_attribute('aria-label')
-    #             note.find_elements(By.CLASS_NAME,'a-icon-alt')
+
                 print('NOTE '+note)
                 tab['notation'] = str(note)
             except:
