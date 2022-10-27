@@ -6,6 +6,8 @@ import json
 from collector import the_chain
 
 
+searchInput = input('What do you want to search on amazon ?')
+searchTruncate = searchInput.replace(' ','+')
 
 
 driver = webdriver.Chrome('./chromedriver.exe')
@@ -21,7 +23,7 @@ search.click()
 time.sleep(3)
 
 
-search.send_keys("Intelligence artificielle")
+search.send_keys(searchInput)
 searchValidate = driver.find_element(By.ID, "nav-search-submit-button")
 time.sleep(3)
 searchValidate.click()
@@ -29,7 +31,7 @@ searchValidate.click()
 articles = driver.find_elements(By.CLASS_NAME,
                         'sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
 time.sleep(3)
-data = the_chain(5,articles,driver)
+data = the_chain(5,articles,driver,searchTruncate)
 
 with open('amazon_search.json', 'w') as file:
     json.dump(data, file, indent=2)

@@ -3,12 +3,12 @@ from selenium.webdriver.common.by import By
 from utiles import Database
 import time
 
-def the_chain(nb_pages, articles,driver):
+def the_chain(nb_pages, articles,driver,searchTruncate):
     Database.connectDb()
     Database.createTable()
     
     data = []
-    start_urls = [f'https://www.amazon.fr/s?k=Intelligence+artificielle&page={n}' for n in range(1,nb_pages+1)]
+    start_urls = [f'https://www.amazon.fr/s?k={searchTruncate}&page={n}' for n in range(1,nb_pages+1)]
     i = 0
     for n in range(0, nb_pages) :
         
